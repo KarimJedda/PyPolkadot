@@ -29,3 +29,23 @@ balance = polka.get_balance("12pDATAH2rCakrYjo6UoYFtmTEUpSyePTum8U5x9QdySZuqn")
 print(f"Balance: {balance} DOT")
 
 ```
+
+
+```python
+# Create a Polkadot instance (testnet, defaults to Polkadot Westend)
+polka = Polkadot(testnet=True)
+
+# Create a new wallet
+wallet1 = Wallet.create(polka)
+address = wallet1.default_address
+
+# Request tokens from the faucet (only on testnet)
+faucet_tx = wallet1.faucet()
+
+# Get balance
+balance = wallet1.get_balance()
+
+# Send tokens
+receiver_address = "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
+tx_receipt = wallet1.send(1, receiver_address)
+```
