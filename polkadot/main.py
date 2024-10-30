@@ -76,7 +76,7 @@ class Polkadot:
         try:
             call = self.substrate.compose_call(
                 call_module='Balances',
-                call_function='transfer',
+                call_function='transfer_keep_alive',
                 call_params={
                     'dest': receiver,
                     'value': int(amount * 10**10)  # Convert DOT to planck
