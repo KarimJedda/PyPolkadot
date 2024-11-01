@@ -71,17 +71,30 @@ class Polkadot:
         except Exception as e:
             raise PolkadotException(f"Failed to get balance: {str(e)}")
 
-    def send_tokens(self, sender_wallet, amount, receiver):
+    def send_tokens(self, sender_wallet, amount, receiver, asset_id=None):
         self.ensure_connected()
+        
         try:
-            call = self.substrate.compose_call(
-                call_module='Balances',
-                call_function='transfer_keep_alive',
-                call_params={
-                    'dest': receiver,
-                    'value': int(amount * 10**10)  # Convert DOT to planck
-                }
-            )
+            if asset_id is None:
+                call = self.substrate.compose_call(
+                    call_module='Balances',
+                    call_function='transfer_keep_alive',
+                    call_params={
+                        'dest': receiver,
+                        'value': int(amount * 10**10)
+                    }
+                )
+            else:
+                call = self.substrate.compose_call(
+                    call_module='Assets',
+                    call_function='transfer',
+                    call_params={
+                        'id': asset_id,
+                        'target': receiver,
+                        'amount': int(amount * 10**10)
+                    }
+                )
+
             extrinsic = self.substrate.create_signed_extrinsic(call=call, keypair=sender_wallet.keypair)
             receipt = self.substrate.submit_extrinsic(extrinsic, wait_for_inclusion=True)
             return receipt
