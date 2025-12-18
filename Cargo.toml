@@ -1,6 +1,6 @@
 [package]
 name = "pypolkadot"
-version = "0.1.0"
+version = "0.2.1"
 edition = "2021"
 rust-version = "1.75.0"
 description = "Python light client for Polkadot/Substrate via smoldot"
@@ -12,7 +12,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 # PyO3 for Python bindings
-pyo3 = { version = "0.22", features = ["extension-module"] }
+pyo3 = { version = "0.24.1", features = ["extension-module"] }
 
 # Subxt with light client support
 subxt = { git = "https://github.com/paritytech/subxt", rev = "a2080bf1f7414e3e55429984b3d53f3828fe7897", default-features = false, features = [

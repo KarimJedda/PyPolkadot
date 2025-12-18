@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "pypolkadot"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python light client for Polkadot/Substrate via smoldot"
 readme = "README.md"
 license = { text = "GPL-3.0" }

@@ -84,7 +84,7 @@ fn scale_value_to_py(py: Python<'_>, value: &Value<()>) -> PyResult<PyObject> {
         .map_err(|e| PyRuntimeError::new_err(format!("JSON serialization error: {}", e)))?;
 
     // Parse JSON into Python object
-    let json_module = py.import_bound("json")?;
+    let json_module = py.import("json")?;
     let result = json_module.call_method1("loads", (json,))?;
     Ok(result.into())
 }
@@ -145,7 +145,7 @@ impl Event {
 }
 
 /// Block subscription iterator
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct BlockSubscription {
     receiver: std::sync::mpsc::Receiver<Result<Block, String>>,
 }
