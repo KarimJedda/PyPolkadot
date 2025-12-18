@@ -45,7 +45,7 @@ for block in client.subscribe_finalized():
 | Method | Description |
 |--------|-------------|
 | `LightClient()` | Connect to Polkadot mainnet |
-| `LightClient(testnet=True)` | Connect to Polkadot mainnet |
+| `LightClient(testnet=True)` | Connect to Polkadot testnet |
 | `LightClient.from_chain_spec(json)` | Connect with custom chain spec |
 | `client.storage(pallet, entry, keys)` | Query storage |
 | `client.events(block_hash, pallet, name)` | Get/filter events |
