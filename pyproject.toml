@@ -1,32 +1,37 @@
 [build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=1.8,<2.0"]
+build-backend = "maturin"
 
 [project]
-name = "PyPolkadot"
-version = "0.1.3"
-description = "Abstractions for the Polkadot ecosystem"
+name = "pypolkadot"
+version = "0.1.0"
+description = "Python light client for Polkadot/Substrate via smoldot"
 readme = "README.md"
-authors = [{name = "Karim Jedda", email = "karim@parity.io"}]
-license = {file = "LICENSE"}
+license = { text = "GPL-3.0" }
+requires-python = ">=3.9"
+keywords = ["polkadot", "substrate", "blockchain", "light-client", "smoldot", "web3"]
 classifiers = [
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Rust",
+    "Topic :: Software Development :: Libraries",
 ]
-keywords = ["polkadot", "blockchain", "cryptocurrency"]
-dependencies = [
-    "substrate-interface==1.7.10",
-]
-requires-python = ">=3.7"
 
 [project.urls]
 Homepage = "https://github.com/KarimJedda/PyPolkadot"
+Documentation = "https://github.com/KarimJedda/PyPolkadot"
+Repository = "https://github.com/KarimJedda/PyPolkadot"
 
 [project.optional-dependencies]
-dev = ["pytest==8.3.2", "ruff==0.6.2", "twine==5.1.1", "build==1.2.1"]
+dev = ["pytest"]
 
-[tool.ruff]
-line-length = 120 # no longer 1980s 
-lint.select = ["E", "F", "W", "C90"]
-lint.ignore = ["E203", "E266", "E501"]
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "pypolkadot._pypolkadot"
+strip = true

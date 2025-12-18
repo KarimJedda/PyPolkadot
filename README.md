@@ -1,51 +1,71 @@
-# PyPolkadot
+# pypolkadot
 
-Abstractions for the Polkadot ecosystem. 
+Experimental Python light client for Polkadot/Substrate via [smoldot](https://github.com/smol-dot/smoldot).
 
-This package is a very opinionated wrapper around `py-substrate-interface`. It provides a simple synchronous interface for interacting with the Polkadot ecosystem. The `PyPolkadot` package can automatically detect when the metadata is outdated and refresh it behind the scenes. This ensures that developers don’t have to manually handle metadata updates.
+Connect to Polkadot blockchains **trustlessly** - no full node, no RPC provider needed.
 
-Note: Light client functionality is not yet supported. 
+This is a feasibility demonstrator to integrate the functionality in https://github.com/JAMdotTech/py-polkadot-sdk. 
 
 ## Installation
 
-`pip install PyPolkadot`
-
-## Usage
-
-### Basic usage
-
-```python
-
-from polkadot import *
-
-# Initialize Polkadot instance
-polka = Polkadot()  # Defaults to the mainnet relay chain
-
-# Optionally, specify a custom RPC endpoint or use a testnet
-polka = Polkadot(endpoint="wss://polkadot-rpc-tn.dwellir.com")
-
-# Get account balance
-balance = polka.get_balance("12pDATAH2rCakrYjo6UoYFtmTEUpSyePTum8U5x9QdySZuqn")
-print(f"Balance: {balance} DOT")
-
+```bash
+pip install pypolkadot
 ```
 
+## Quick Start
 
 ```python
-# Create a Polkadot instance (testnet, defaults to Polkadot Westend)
-polka = Polkadot(testnet=True)
+from pypolkadot import LightClient
 
-# Create a new wallet
-wallet1 = Wallet.create(polka)
-address = wallet1.default_address
+# Connect to Polkadot mainnet (embedded light client)
+client = LightClient()
 
-# Request tokens from the faucet (only on testnet)
-faucet_tx = wallet1.faucet()
+# Query storage
+total = client.storage("Balances", "TotalIssuance")
+print(f"Total issuance: {total}")
 
-# Get balance
-balance = wallet1.get_balance()
+# Get events
+for event in client.events(pallet="System"):
+    print(f"{event.pallet}.{event.name}")
 
-# Send tokens
-receiver_address = "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
-tx_receipt = wallet1.send(1, receiver_address)
+# Subscribe to blocks
+for block in client.subscribe_finalized():
+    print(f"Block #{block.number}: {block.hash}")
 ```
+
+## Features
+
+- Verifies proofs cryptographically, no RPC trust required
+- Light client runs in-process, no external dependencies
+- Query any storage/events without codegen
+- Simple Python API, no async/await required
+
+## API
+
+| Method | Description |
+|--------|-------------|
+| `LightClient()` | Connect to Polkadot mainnet |
+| `LightClient(testnet=True)` | Connect to Polkadot mainnet |
+| `LightClient.from_chain_spec(json)` | Connect with custom chain spec |
+| `client.storage(pallet, entry, keys)` | Query storage |
+| `client.events(block_hash, pallet, name)` | Get/filter events |
+| `client.submit(signed_hex)` | Submit pre-signed extrinsic |
+| `client.subscribe_finalized()` | Stream finalized blocks |
+
+## Development
+
+```bash
+# Setup
+uv venv && source .venv/bin/activate
+pip install maturin
+
+# Build
+maturin develop
+
+# Test
+python tests/test_storage.py
+```
+
+## License
+
+GPL-3.0 as intended.

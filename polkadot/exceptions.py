@@ -1,2 +1,0 @@
-class PolkadotException(Exception):
-    pass

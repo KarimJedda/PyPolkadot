@@ -1,0 +1,48 @@
+[package]
+name = "pypolkadot"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75.0"
+description = "Python light client for Polkadot/Substrate via smoldot"
+license = "Apache-2.0 OR GPL-3.0"
+
+[lib]
+name = "_pypolkadot"
+crate-type = ["cdylib"]
+
+[dependencies]
+# PyO3 for Python bindings
+pyo3 = { version = "0.22", features = ["extension-module"] }
+
+# Subxt with light client support
+subxt = { git = "https://github.com/paritytech/subxt", rev = "a2080bf1f7414e3e55429984b3d53f3828fe7897", default-features = false, features = [
+    "native",
+    "unstable-light-client",
+    "jsonrpsee"
+] }
+
+# Tokio runtime for async
+tokio = { version = "1", features = ["rt-multi-thread", "sync"] }
+
+# Futures for stream handling
+futures = "0.3"
+
+# Error handling
+thiserror = "2.0"
+
+# JSON serialization for converting scale_value::Value to Python
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+
+# Hex encoding/decoding
+hex = "0.4"
+
+# Fix smoldot dependency issue with ed25519-zebra
+ed25519-zebra = { version = "4", features = ["alloc"] }
+
+# Optimize smoldot in dev builds (critical for usable performance)
+[profile.dev.package.smoldot-light]
+opt-level = 2
+
+[profile.dev.package.smoldot]
+opt-level = 2
